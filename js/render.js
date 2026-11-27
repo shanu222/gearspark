@@ -80,7 +80,7 @@
 
   function label(ctx, text, x, y, size, color, rot) {
     ctx.save(); ctx.translate(x, y); ctx.rotate(-rot);
-    ctx.font = `700 ${size}px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif`;
+    ctx.font = `700 ${size}px "Chakra Petch", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillStyle = color; ctx.fillText(text, 0, 0);
     ctx.restore();

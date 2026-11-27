@@ -7,7 +7,7 @@ Date: 27 Nov 2026 · Build: `npm run build` (Node 22) · Browser: Google Chrome 
 |---|---|
 | Production build | ✅ builds with no errors or warnings (`dist/` + standalone file) |
 | Level & physics verification (`npm test`) | ✅ 18/18 levels solvable, 17 "trap" wrong answers correctly fail, 3/3 physics rules |
-| Browser end-to-end on the production build (`npm run test:e2e`) | ✅ 46/46 checks |
+| Browser end-to-end on the production build (`npm run test:e2e`) | ✅ 50/50 checks |
 | Console / page errors | ✅ none |
 | Content-Security-Policy violations | ✅ none |
 
@@ -20,9 +20,11 @@ The E2E suite runs against `dist/` served by `test/serve.mjs`, which applies the
 
 **Every level through the real UI:** each of the 18 stored solutions is applied in the live app and must show the win modal with ★★★; the last level offers Sandbox; after reload, 54/54 stars persist and all levels stay unlocked.
 
-**Sandbox:** all 19 parts unlimited; a short circuit built with real drags is detected and explained; two meshing cranks are detected as a gear jam.
+**Sandbox:** hint button and par meter hidden; all 19 parts unlimited; a short circuit built with real drags is detected and explained; two meshing cranks are detected as a gear jam.
 
 **Mobile (390 × 844, touch) and tablet (820 × 1180, touch):** no horizontal overflow on menu or game; level 1-1 solved with touch taps only.
+
+**UI v2 checks:** loading splash dismisses, self-hosted display font loads under the strict CSP.
 
 **Production safety:** the test hook (`GS.debug`) is absent unless `?debug` is in the URL.
 
@@ -79,8 +81,11 @@ PASS unknown route returns 404 page
 PASS /favicon.svg served
 PASS /robots.txt served
 PASS /og.png served
+PASS /fonts/chakra-petch-latin-700-normal.woff2 served
 PASS menu renders 4 worlds and 18 level buttons
 PASS only level 1-1 unlocked on first visit
+PASS loading splash dismisses
+PASS display font loaded
 PASS How-to-play modal opens from menu
 PASS modal closes
 PASS first level start shows help once
@@ -96,16 +101,17 @@ PASS cannot place on blocked square
 PASS cannot place on fixed part
 PASS hint shows toast
 PASS goal turns green when bulb lights
-PASS multimeter shows live bulb reading  [Bulb 6 V fixed  12 Ω lamp rated 6 V. Bright above 4 V, burns out above 9 V.  Voltage 5.75 ]
+PASS multimeter shows live bulb reading  [Bulb 6 V fixed  12 Ω lamp rated 6 V. Bright above 4 V, burns out above 9 V.  VOLTAGE 5.75 ]
 PASS win modal with 3 stars
 PASS Next level button opens 1-2
 PASS tapping a switch flips it
 PASS sound toggle persists
 PASS reset restores level start
-PASS back to menu shows 1-1 with stars and 1-2 unlocked
+PASS back to menu shows 1-1 with 3 stars and 1-2 unlocked
 PASS all 18 levels: verified solution wins with ★★★ in the real UI
 PASS final level offers Sandbox
 PASS progress persists after reload (54/54 stars, all unlocked)
+PASS sandbox hides hint button and par meter
 PASS sandbox offers all 19 parts with unlimited counts
 PASS short circuit detected and explained
 PASS gear jam detected and explained
@@ -118,7 +124,7 @@ PASS tablet: no horizontal overflow in game  [scrollWidth 820]
 PASS debug hook not exposed in production URL
 PASS no CSP violations
 PASS no console or page errors
-46/46 checks passed
+50/50 checks passed
 ```
 
 ## Not verified here (needs your accounts)

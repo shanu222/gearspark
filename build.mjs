@@ -45,7 +45,7 @@ const page = base
   .replace('</head>', `  <link rel="stylesheet" href="/${cssName}">\n</head>`)
   .replace('</body>', `<script src="/${jsName}" defer></script>\n</body>`);
 fs.writeFileSync(path.join(dist, 'index.html'), page);
-for (const f of fs.readdirSync(path.join(root, 'public'))) fs.copyFileSync(path.join(root, 'public', f), path.join(dist, f));
+fs.cpSync(path.join(root, 'public'), dist, { recursive: true });
 fs.writeFileSync(path.join(dist, '404.html'), `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page not found | GearSpark</title><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/${cssName}"></head><body><main class="notfound"><h1>404</h1><p>This page doesn’t exist. The machine is still running, though.</p><a class="btnlink" href="/">▶ Back to GearSpark</a></main></body></html>`);
 fs.writeFileSync(path.join(dist, 'robots.txt'), `User-agent: *\nAllow: /\n${SITE_URL ? `Sitemap: ${SITE_URL}/sitemap.xml\n` : ''}`);
 if (SITE_URL) fs.writeFileSync(path.join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${SITE_URL}/</loc></url></urlset>\n`);
@@ -53,8 +53,10 @@ if (SITE_URL) fs.writeFileSync(path.join(dist, 'sitemap.xml'), `<?xml version="1
 // ---- standalone single file ----
 const sa = path.join(root, 'build', 'standalone');
 fs.mkdirSync(sa, { recursive: true });
+const inlineFonts = (c) => c.replace(/url\("\/fonts\/([^"]+)"\)/g, (_, f) => `url("data:font/woff2;base64,${fs.readFileSync(path.join(root, 'public', 'fonts', f)).toString('base64')}")`);
 const standalone = base
-  .replace('</head>', `  <style>\n${css}</style>\n</head>`)
+  .replace(/\s*<link rel="preload"[^>]+>/, '')
+  .replace('</head>', `  <style>\n${inlineFonts(css)}</style>\n</head>`)
   .replace('</body>', `<script>\n${js.replace(/<\/script/gi, '<\\/script')}</script>\n</body>`)
   .replace('<link rel="icon" href="/favicon.svg" type="image/svg+xml">', `<link rel="icon" href="data:image/svg+xml,${encodeURIComponent(read('public/favicon.svg'))}">`);
 fs.writeFileSync(path.join(sa, 'gearspark.html'), standalone);

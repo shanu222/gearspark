@@ -13,7 +13,8 @@ A product of Resilience Technologies Labs.
 - **Stars by parts used vs par**, sequential unlocks, progress saved in the browser
 - **Input:** mouse, touch (drag or tap-to-place) and keyboard (`R`, `Del`, `Ctrl+Z`, `Esc`, `Space`)
 - **Audio:** synthesized sound effects with a mute toggle (remembered)
-- **No images, fonts or third-party scripts:** all art is drawn in code
+- **Game-style UI:** animated title screen, level map with progress paths, glowing goal chips, parts dock, smooth part rotation, placement bursts, power-on flash, confetti wins, splash loader, reduced-motion support
+- **No images or third-party scripts:** all game art is drawn in code; fonts (Chakra Petch, Inter, SIL OFL) are self-hosted
 
 ## Architecture
 Fully client-side static site. **No backend, database or file storage is required**, and none is included (see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md#why-no-backend-database-or-storage)).
@@ -27,7 +28,7 @@ js/levels.js          level data + verified solutions + "trap" wrong answers
 js/render.js          procedural canvas art
 js/audio.js           Web Audio sound effects
 js/game.js            UI, input, progress (localStorage)
-public/               favicon.svg, og.png (copied to dist/)
+public/               favicon.svg, og.png, fonts/ (copied to dist/)
 build.mjs             zero-dependency production build
 vercel.json           Vercel build + security/caching headers
 test/verify-levels.mjs  level + physics verification (Node)

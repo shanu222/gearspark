@@ -7,69 +7,123 @@
   <meta name="description" content="GearSpark is a free browser puzzle game where you wire circuits, connect gears, and build motors and generators. Real physics: Ohm's law, gear ratios and energy conversion. 18 levels plus sandbox.">
   <meta property="og:title" content="GearSpark: Wire it. Gear it. Power it.">
   <meta property="og:description" content="Free electromechanical puzzle game with real circuit and gear physics. Play in your browser, no download.">
-  <meta name="theme-color" content="#0b1a2b">
+  <meta name="theme-color" content="#07121f">
   <!--SITE_META-->
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <noscript><p style="padding:24px;font:16px system-ui;color:#eaf2fb">GearSpark needs JavaScript to run. Please enable it and reload.</p></noscript>
-<div id="fatal" class="fatal" hidden role="alert"><div><h2>Something went wrong</h2><p>GearSpark hit an unexpected error. Your saved progress is safe.</p><button class="primary" id="btn-reload">Reload game</button></div></div>
+
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 9h10a6 6 0 010 12h-3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 12a8 8 0 108-8 8.5 8.5 0 00-6 2.5L4 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 3v5h5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-hint" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.7.5 1 1.2 1 2.1h5c0-.9.3-1.6 1-2.1A6 6 0 0012 3z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9.5 9.5a2.5 2.5 0 114 2c-1 .6-1.5 1.1-1.5 2.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16.5 9.5l5 5M21.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-sandbox" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M17.25 14v6.5M14 17.25h6.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z" fill="currentColor"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 10.5V8a4 4 0 018 0v2.5" fill="none" stroke="currentColor" stroke-width="2.4"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2L5 13.5h6L9.5 22 19 9.5h-6z" fill="currentColor"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2l1.6 2.6 3-.8.6 3 3 .6-.8 3L22 12l-2.6 1.6.8 3-3 .6-.6 3-3-.8L12 22l-1.6-2.6-3 .8-.6-3-3-.6.8-3L2 12l2.6-1.6-.8-3 3-.6.6-3 3 .8zM12 8.2a3.8 3.8 0 100 7.6 3.8 3.8 0 000-7.6z" fill="currentColor"/></symbol>
+    <symbol id="i-motor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M7.5 16V8l4.5 5 4.5-5v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+    <symbol id="i-turbine" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.4" fill="currentColor"/><path d="M12 9.6C11 6 11.5 3 13.5 2.2c1.6 2 .6 5-1.5 7.4zM14.1 13.2c3.6.9 6 3 5.6 5.1-2.5.4-4.6-2-5.6-5.1zM9.9 13.2c-2.6 2.7-5.6 3.6-7.2 2.2 1-2.4 4.1-3 7.2-2.2z" fill="currentColor"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.2 1.3-6.6L2.5 9.3l6.6-.8z" fill="currentColor"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-rotate" viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-2.3-5.7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-switch" viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="10" rx="5" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="16.5" cy="12" r="3" fill="currentColor"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5zM4 20.5A2.5 2.5 0 006.5 23H20v-5" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/></symbol>
+    <symbol id="i-drag" viewBox="0 0 24 24"><path d="M9 11V5.5a1.5 1.5 0 013 0V10m0-1.5a1.5 1.5 0 013 0V11m0-1a1.5 1.5 0 013 0v5a7 7 0 01-7 7h-.5a6 6 0 01-4.8-2.4L4 15.5a1.6 1.6 0 012.4-2.1L9 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div id="splash" class="splash" aria-hidden="true">
+  <svg class="splash-logo" viewBox="0 0 64 64"><use href="#logo-mark"/></svg>
+  <div class="splash-name">GEAR<span>SPARK</span></div>
+  <div class="splash-bar"><i></i></div>
+</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="logo-mark" viewBox="0 0 64 64"><path fill="#e0ad48" d="M32 4l4.4 6.4 7.6-2.2 1.1 7.7 7.7 1.1-2.2 7.6L57 29l-5.6 5.4 2.2 7.6-7.7 1.1-1.1 7.7-7.6-2.2L32 55l-4.4-6.4-7.6 2.2-1.1-7.7-7.7-1.1 2.2-7.6L7 29l5.6-5.4-2.2-7.6 7.7-1.1 1.1-7.7 7.6 2.2z"/><circle cx="32" cy="29.5" r="13" fill="#07121f"/><path d="M34.5 17l-10 14.5h7.5L28.5 42 39.5 26.5H32z" fill="#ffd25a"/></symbol>
+</defs></svg>
+
+<div id="fatal" class="fatal" hidden role="alert"><div><h2>Something went wrong</h2><p>Your saved progress is safe.</p><button class="btn btn-primary" id="btn-reload">Reload game</button></div></div>
+
 <div id="app">
-  <!-- MENU -->
+  <!-- TITLE / LEVEL MAP -->
   <section class="screen" id="screen-menu">
-    <header class="hero">
-      <div class="brand">
-        <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><g fill="#d9a845"><path d="M32 6l4 6 7-2 1 7 7 2-3 6 5 5-6 4 2 7-7 1-2 7-6-3-5 5-4-6-7 2-1-7-7-2 3-6-5-5 6-4-2-7 7-1 2-7 6 3z"/></g><circle cx="32" cy="32" r="12" fill="#0b1a2b"/><path d="M34 20l-9 14h7l-3 10 10-15h-7z" fill="#ffd25a"/></svg>
-        <div><h1>Gear<span>Spark</span></h1><p class="tag">Wire it. Gear it. Power it.</p></div>
-      </div>
-      <p class="lede">An electromechanical puzzle game with <b>real physics</b>. Wire circuits, mesh gears, drive motors and spin generators. Every volt, amp and rpm is calculated, not faked.</p>
-      <div class="hero-actions">
-        <button class="primary big" id="btn-continue">▶ Start playing</button>
-        <button id="btn-sandbox">🧪 Sandbox</button>
-        <button id="btn-help-menu">❔ How to play</button>
-      </div>
-      <div class="progress">★ <b id="total-stars">0 / 54</b> stars earned</div>
-    </header>
-    <div id="worlds" class="worlds"></div>
-    <section class="about">
-      <h2>What you’ll learn</h2>
-      <div class="learn-grid">
-        <div><b>⚡ Circuits</b><p>Closed loops, switches, series vs parallel, Ohm’s law, resistors and diodes.</p></div>
-        <div><b>⚙️ Gears</b><p>Direction reversal, speed ratios, idlers, compound gearboxes and belts.</p></div>
-        <div><b>🔁 Motors</b><p>Turning electricity into motion, reversing polarity, speed control.</p></div>
-        <div><b>🔋 Generators</b><p>Turning motion into electricity, hydro power and why perpetual motion is impossible.</p></div>
-      </div>
-    </section>
-    <footer class="foot">GearSpark · a Resilience Technologies Labs game · progress is saved in this browser</footer>
+    <canvas id="menu-bg" aria-hidden="true"></canvas>
+    <div class="menu-wrap">
+      <header class="title">
+        <div class="brand">
+          <svg class="brand-logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo-mark"/></svg>
+          <div>
+            <h1>GEAR<span>SPARK</span></h1>
+            <p class="tag">Wire it. Gear it. Power it.</p>
+          </div>
+        </div>
+        <div class="title-actions">
+          <button class="btn-play" id="btn-continue">
+            <span class="play-ico"><svg><use href="#i-play"/></svg></span>
+            <span class="play-txt"><b id="play-label">Play</b><small id="play-sub">Level 1-1</small></span>
+          </button>
+          <div class="round-row">
+            <button class="icon-btn lg" id="btn-sandbox" title="Sandbox" aria-label="Sandbox"><svg><use href="#i-sandbox"/></svg><span>Sandbox</span></button>
+            <button class="icon-btn lg" id="btn-help-menu" title="How to play" aria-label="How to play"><svg><use href="#i-help"/></svg><span>How to play</span></button>
+            <button class="icon-btn lg" id="btn-sound-menu" title="Sound" aria-label="Sound"><svg><use href="#i-sound"/></svg><span>Sound</span></button>
+          </div>
+        </div>
+        <div class="star-pill"><svg><use href="#i-star"/></svg><b id="total-stars">0 / 54</b></div>
+      </header>
+      <div id="worlds" class="worlds"></div>
+      <footer class="foot">Real physics · progress saved on this device · Resilience Technologies Labs</footer>
+    </div>
   </section>
 
   <!-- GAME -->
   <section class="screen" id="screen-game" hidden>
-    <header class="gbar">
-      <button id="btn-back" title="Levels">‹ Levels</button>
-      <div class="gtitle"><span id="lv-world"></span><b id="lv-title"></b></div>
-      <div class="gtools">
-        <button id="btn-undo" title="Undo (Ctrl+Z)">↶</button>
-        <button id="btn-reset" title="Reset level">⟲</button>
-        <button id="btn-hint" title="Hint">💡</button>
-        <button id="btn-help" title="How to play">❔</button>
-        <button id="btn-sound" title="Sound">🔊</button>
+    <header class="hud">
+      <button class="icon-btn" id="btn-back" title="Levels" aria-label="Back to levels"><svg><use href="#i-back"/></svg></button>
+      <div class="lv-chip">
+        <span class="lv-badge" id="lv-badge"><svg><use href="#i-bolt"/></svg></span>
+        <span class="lv-text"><small id="lv-world"></small><b id="lv-title"></b></span>
+      </div>
+      <div class="hud-tools">
+        <button class="icon-btn" id="btn-undo" title="Undo (Ctrl+Z)" aria-label="Undo"><svg><use href="#i-undo"/></svg></button>
+        <button class="icon-btn" id="btn-reset" title="Reset level" aria-label="Reset level"><svg><use href="#i-reset"/></svg></button>
+        <button class="icon-btn hint" id="btn-hint" title="Hint" aria-label="Hint"><svg><use href="#i-hint"/></svg></button>
+        <button class="icon-btn" id="btn-help" title="How to play" aria-label="How to play"><svg><use href="#i-help"/></svg></button>
+        <button class="icon-btn" id="btn-sound" title="Sound" aria-label="Sound"><svg><use href="#i-sound"/></svg></button>
       </div>
     </header>
-    <div class="gmain">
-      <div class="play">
-        <p id="intro" class="intro"></p>
-        <div id="board-wrap" class="board-wrap"><canvas id="board"></canvas><div id="toast" class="toast"></div></div>
-        <div id="inventory" class="inventory" aria-label="Parts tray"></div>
+
+    <div class="stage">
+      <div class="board-area">
+        <div class="board-top">
+          <ul id="goals" class="goal-chips" aria-label="Goals"></ul>
+          <div id="par" class="par-meter"></div>
+        </div>
+        <div id="board-wrap" class="board-wrap">
+          <canvas id="board"></canvas>
+          <div id="intro" class="briefing" hidden><svg><use href="#i-bolt"/></svg><span id="intro-text"></span><button id="intro-close" aria-label="Dismiss"><svg><use href="#i-close"/></svg></button></div>
+          <div id="status" class="alerts" aria-live="polite"></div>
+          <div id="toast" class="toast" role="status"></div>
+        </div>
       </div>
       <aside class="side">
-        <div class="card" id="goals-card"><h3>Goals</h3><ul id="goals" class="goals"></ul><p id="par" class="muted small"></p></div>
-        <div id="status"></div>
-        <div class="card"><h3>Multimeter</h3><div id="meter" class="meter"></div></div>
-        <div class="card concept-card"><h3>Engineering concept</h3><div id="concept"></div></div>
+        <div class="panel meter-panel"><div id="meter" class="meter"></div></div>
+        <details class="panel concept-panel" id="concept-panel">
+          <summary><svg><use href="#i-book"/></svg><span>Engineering concept</span></summary>
+          <div id="concept"></div>
+        </details>
       </aside>
     </div>
+    <div class="dock-wrap"><div id="inventory" class="dock" aria-label="Parts"></div></div>
   </section>
 
   <div id="modal" class="modal" hidden><div id="modal-body" class="modal-body"></div></div>

@@ -30,7 +30,7 @@ try:
         urllib.request.urlopen(BASE + '/no-such-page'); check('unknown route returns 404 page', False)
     except urllib.error.HTTPError as e:
         check('unknown route returns 404 page', e.code == 404 and 'Back to GearSpark' in e.read().decode())
-    for f in ['/favicon.svg', '/robots.txt', '/og.png']:
+    for f in ['/favicon.svg', '/robots.txt', '/og.png', '/fonts/chakra-petch-latin-700-normal.woff2']:
         try: check(f'{f} served', urllib.request.urlopen(BASE + f).status == 200)
         except urllib.error.HTTPError as e: check(f'{f} served', False, str(e.code))
 
@@ -66,6 +66,10 @@ try:
         pg.wait_for_timeout(300)
         check('menu renders 4 worlds and 18 level buttons', pg.locator('.world').count() == 4 and pg.locator('.lv').count() == 18)
         check('only level 1-1 unlocked on first visit', pg.locator('.lv:not([disabled])').count() == 1)
+        pg.wait_for_selector('#splash.gone', state='attached', timeout=4000)
+        check('loading splash dismisses', pg.locator('#splash.gone').count() == 1)
+        check('display font loaded', pg.evaluate("document.fonts.check('700 20px \"Chakra Petch\"')"))
+        pg.wait_for_timeout(600)
         pg.screenshot(path=str(SHOTS / 'desktop-menu.png'))
         pg.click('#btn-help-menu'); check('How-to-play modal opens from menu', pg.locator('#modal-body .help').is_visible())
         pg.click('#modal-body button'); check('modal closes', pg.locator('#modal').is_hidden())
@@ -101,6 +105,7 @@ try:
         pg.screenshot(path=str(SHOTS / 'desktop-1-1-solved.png'))
         pg.wait_for_selector('#modal-body .win', timeout=4000)
         check('win modal with 3 stars', pg.locator('.big-stars span.on').count() == 3)
+        pg.wait_for_timeout(1200)
         pg.screenshot(path=str(SHOTS / 'desktop-1-1-win.png'))
         pg.click('button[data-a="next"]'); pg.wait_for_timeout(200)
         check('Next level button opens 1-2', '1-2' in pg.inner_text('#lv-title'))
@@ -110,7 +115,7 @@ try:
         pg.click('#btn-sound')
         pg.click('#btn-reset'); check('reset restores level start', tile(pg, 2, 1)['on'] is False)
         pg.click('#btn-back'); pg.wait_for_timeout(100)
-        check('back to menu shows 1-1 with stars and 1-2 unlocked', pg.locator('.lv:not([disabled])').count() == 2 and '★★★' in pg.locator('.lv').first.inner_text())
+        check('back to menu shows 1-1 with 3 stars and 1-2 unlocked', pg.locator('.lv:not([disabled])').count() == 2 and pg.locator('.lv').first.locator('.st.on').count() == 3)
 
         # ---------- every level wins through the UI ----------
         lv_ids = pg.evaluate('GS.LEVELS.map(l=>l.id)')
@@ -133,6 +138,7 @@ try:
 
         # ---------- sandbox: physics problems surface in UI ----------
         pg.click('#btn-sandbox'); pg.wait_for_timeout(200)
+        check('sandbox hides hint button and par meter', pg.locator('#btn-hint').is_hidden() and pg.locator('#par').is_hidden())
         check('sandbox offers all 19 parts with unlimited counts', pg.locator('.inv-item').count() == 19 and pg.inner_text('.inv-item .inv-count') == '∞')
         drag_from_tray(pg, 'battery', 1, 0)
         for (t, x, y, rot) in [('wire_l', 0, 0, 1), ('wire_l', 2, 0, 2), ('wire_l', 0, 1, 0), ('wire_i', 1, 1, 1), ('wire_l', 2, 1, 3)]:
@@ -149,7 +155,7 @@ try:
         for name, vp in [('mobile', {'width': 390, 'height': 844}), ('tablet', {'width': 820, 'height': 1180})]:
             m = browser.new_page(viewport=vp, has_touch=True, is_mobile=(name == 'mobile'))
             m.on('pageerror', lambda e: errors.append('pageerror: ' + str(e)))
-            m.goto(BASE + '/?debug'); m.wait_for_timeout(250)
+            m.goto(BASE + '/?debug'); m.wait_for_selector('#splash.gone', state='attached', timeout=4000); m.wait_for_timeout(700)
             sw = m.evaluate('document.documentElement.scrollWidth')
             check(f'{name}: no horizontal overflow on menu', sw <= vp['width'], f'scrollWidth {sw}')
             m.screenshot(path=str(SHOTS / f'{name}-menu.png'))
