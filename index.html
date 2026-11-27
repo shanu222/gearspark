@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GearSpark: Electromechanical Puzzle Game | Wire it. Gear it. Power it.</title>
+  <meta name="description" content="GearSpark is a free browser puzzle game where you wire circuits, connect gears, and build motors and generators. Real physics: Ohm's law, gear ratios and energy conversion. 18 levels plus sandbox.">
+  <meta property="og:title" content="GearSpark: Wire it. Gear it. Power it.">
+  <meta property="og:description" content="Free electromechanical puzzle game with real circuit and gear physics. Play in your browser, no download.">
+  <meta name="theme-color" content="#0b1a2b">
+  <!--SITE_META-->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<noscript><p style="padding:24px;font:16px system-ui;color:#eaf2fb">GearSpark needs JavaScript to run. Please enable it and reload.</p></noscript>
+<div id="fatal" class="fatal" hidden role="alert"><div><h2>Something went wrong</h2><p>GearSpark hit an unexpected error. Your saved progress is safe.</p><button class="primary" id="btn-reload">Reload game</button></div></div>
+<div id="app">
+  <!-- MENU -->
+  <section class="screen" id="screen-menu">
+    <header class="hero">
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><g fill="#d9a845"><path d="M32 6l4 6 7-2 1 7 7 2-3 6 5 5-6 4 2 7-7 1-2 7-6-3-5 5-4-6-7 2-1-7-7-2 3-6-5-5 6-4-2-7 7-1 2-7 6 3z"/></g><circle cx="32" cy="32" r="12" fill="#0b1a2b"/><path d="M34 20l-9 14h7l-3 10 10-15h-7z" fill="#ffd25a"/></svg>
+        <div><h1>Gear<span>Spark</span></h1><p class="tag">Wire it. Gear it. Power it.</p></div>
+      </div>
+      <p class="lede">An electromechanical puzzle game with <b>real physics</b>. Wire circuits, mesh gears, drive motors and spin generators. Every volt, amp and rpm is calculated, not faked.</p>
+      <div class="hero-actions">
+        <button class="primary big" id="btn-continue">▶ Start playing</button>
+        <button id="btn-sandbox">🧪 Sandbox</button>
+        <button id="btn-help-menu">❔ How to play</button>
+      </div>
+      <div class="progress">★ <b id="total-stars">0 / 54</b> stars earned</div>
+    </header>
+    <div id="worlds" class="worlds"></div>
+    <section class="about">
+      <h2>What you’ll learn</h2>
+      <div class="learn-grid">
+        <div><b>⚡ Circuits</b><p>Closed loops, switches, series vs parallel, Ohm’s law, resistors and diodes.</p></div>
+        <div><b>⚙️ Gears</b><p>Direction reversal, speed ratios, idlers, compound gearboxes and belts.</p></div>
+        <div><b>🔁 Motors</b><p>Turning electricity into motion, reversing polarity, speed control.</p></div>
+        <div><b>🔋 Generators</b><p>Turning motion into electricity, hydro power and why perpetual motion is impossible.</p></div>
+      </div>
+    </section>
+    <footer class="foot">GearSpark · a Resilience Technologies Labs game · progress is saved in this browser</footer>
+  </section>
+
+  <!-- GAME -->
+  <section class="screen" id="screen-game" hidden>
+    <header class="gbar">
+      <button id="btn-back" title="Levels">‹ Levels</button>
+      <div class="gtitle"><span id="lv-world"></span><b id="lv-title"></b></div>
+      <div class="gtools">
+        <button id="btn-undo" title="Undo (Ctrl+Z)">↶</button>
+        <button id="btn-reset" title="Reset level">⟲</button>
+        <button id="btn-hint" title="Hint">💡</button>
+        <button id="btn-help" title="How to play">❔</button>
+        <button id="btn-sound" title="Sound">🔊</button>
+      </div>
+    </header>
+    <div class="gmain">
+      <div class="play">
+        <p id="intro" class="intro"></p>
+        <div id="board-wrap" class="board-wrap"><canvas id="board"></canvas><div id="toast" class="toast"></div></div>
+        <div id="inventory" class="inventory" aria-label="Parts tray"></div>
+      </div>
+      <aside class="side">
+        <div class="card" id="goals-card"><h3>Goals</h3><ul id="goals" class="goals"></ul><p id="par" class="muted small"></p></div>
+        <div id="status"></div>
+        <div class="card"><h3>Multimeter</h3><div id="meter" class="meter"></div></div>
+        <div class="card concept-card"><h3>Engineering concept</h3><div id="concept"></div></div>
+      </aside>
+    </div>
+  </section>
+
+  <div id="modal" class="modal" hidden><div id="modal-body" class="modal-body"></div></div>
+</div>
+<script src="js/boot.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/levels.js"></script>
+<script src="js/render.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

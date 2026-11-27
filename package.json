@@ -1,0 +1,15 @@
+{
+  "name": "gearspark",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GearSpark: an electromechanical puzzle game with real circuit and gear physics. Wire it. Gear it. Power it.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node test/verify-levels.mjs",
+    "preview": "node build.mjs && node test/serve.mjs",
+    "test:e2e": "node build.mjs && python3 test/e2e.py"
+  }
+}
